@@ -1,0 +1,210 @@
+<?php
+if(!isset($_SESSION))
+{
+  session_start();
+}
+include "config.php";
+//insert sql start
+if(isset($_POST["btnsave"]))
+{
+  $sqlinsert="INSERT INTO purchase(purchase_id,supplier_id,purchase_date,amount,pay_mode,pay_status,upload_slip)
+  VALUES('".mysqli_real_escape_string($con,$_POST["txtpurchaseid"])."',
+        '".mysqli_real_escape_string($con,$_POST["txtsupplierid"])."',
+        '".mysqli_real_escape_string($con,$_POST["txtpurchasedate"])."',
+        '".mysqli_real_escape_string($con,$_POST["txtamount"])."',
+        '".mysqli_real_escape_string($con,$_POST["txtpaymode"])."',
+        '".mysqli_real_escape_string($con,$_POST["txtpaystatus"])."',
+        '".mysqli_real_escape_string($con,$_POST["txtuploadslip"])."')";
+$resultinsert=mysqli_query($con,$sqlinsert) or die ("sql error in sqlinsert" . mysqli_error($con));
+if($resultinsert)
+{
+  echo '<script> alert("Data stored successfully"); </script>';
+}
+}
+//insert sql end
+?>
+<body>
+  <?php
+  if (isset($_GET["option"]))
+  {
+    if ($_GET["option"] == "add")
+    {
+		    ?>
+        <!-- form section start -->
+        <section class="feature_part padding_top">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <form class="form-horizontal" method="POST" action="">
+                    <div class="card-body">
+                      <center><h4 class="card-title">Add Purchase Details</h4></center>
+                      <!-- field start -->
+                      <div class="form-group row">
+                                            <label for="fname" class="col-sm-3 text-right control-label col-form-label">Purchase ID</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" class="form-control" id="txtpurchaseid" name="txtpurchaseid" placeholder="Purchase id Here" required>
+                                            </div>
+                                            <label for="fname" class="col-sm-3 text-right control-label col-form-label">Supplier ID</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" class="form-control" id="txtsupplierid" name="txtsupplierid" placeholder="Supplier ID Here" required>
+                                            </div>
+                                        </div>
+                      <!-- field end -->
+
+                      <!-- field start -->
+                      <div class="form-group row">
+                                          <label for="fname" class="col-sm-3 text-right control-label col-form-label">Purchase Date</label>
+                                          <div class="col-sm-3">
+                                              <input type="date" class="form-control" id="txtpurchasedate" name="txtpurchasedate" placeholder="Purchase Date Here" required>
+                                          </div>
+                                            <label for="fname" class="col-sm-3 text-right control-label col-form-label">Amount</label>
+                                            <div class="col-sm-3">
+                                                <input type="number" class="form-control" id="txtamount" name="txtamount" placeholder="Amount Here" required>
+                                            </div>
+                                        </div>
+                      <!-- field end -->
+
+                      <!-- field start -->
+                      <div class="form-group row">
+                                          <label for="fname" class="col-sm-3 text-right control-label col-form-label">Pay Mode</label>
+                                          <div class="col-sm-3">
+                                              <input type="text" class="form-control" id="txtpaymode" name="txtpaymode" placeholder="Pay Mode Here" required>
+                                          </div>
+                                            <label for="fname" class="col-sm-3 text-right control-label col-form-label">Pay Status</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" class="form-control" id="txtpaystatus" name="txtpaystatus" placeholder="Pay Status Here" required>
+                                            </div>
+                                        </div>
+                      <!-- field end -->
+
+                      <!-- field start -->
+                      <div class="form-group row">
+                                            <label for="fname" class="col-sm-3 text-right control-label col-form-label">Upload Slip</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" class="form-control" id="txtuploadslip" name="txtuploadslip" placeholder=" Upload Slip Here" required>
+                                            </div>
+                                        </div>
+                      <!-- field end -->
+
+                      <!-- button start -->
+                      <div class="form-group row">
+                                            <div class="col-sm-12">
+                          <center>
+                            <a href ="index.php?pg=purchase.php&option=view"><input type="button" class="btn btn-primary" id="btngoback" name="btngoback" value="Go back"></a>
+                            <input type="reset" class="btn btn-danger" id="btnclear" name="btnclear" value="Clear">
+                            <input type="submit" class="btn btn-success" id="btnsave" name="btnsave" value="Save">
+                          </center>
+                                            </div>
+                                        </div>
+                      <!-- button end -->
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- form section end -->
+
+
+        <?php
+    }
+    else if ($_GET["option"] == "view")
+    {
+      ?>
+      <div class="card">
+        <div class="card-body">
+        <center>  <h5 class="card-title">Purchase View</h5></center>
+          <div class="table-responsive">
+            <table id="zero_config" class="table table-striped table-bordered">
+              <a href="index.php?pg=purchase.php&option=add"><button class="btn btn-primary">Add Record</button></a>
+              <br><br>
+              <thead>
+                <tr>
+                  <th>Purchase ID</th>
+                  <th>Supplier id</th>
+                  <th>Amount</th>
+                  <th>Pay Mode</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                $sqlview="SELECT purchase_id,supplier_id,amount,pay_mode FROM purchase";
+                $resultview = mysqli_query($con,$sqlview) or die ("Error in sqlview ".mysqli_error($con));
+                while($rowview=mysqli_fetch_assoc($resultview))
+                {
+                  echo'<tr>';
+                    echo '<td>'.$rowview["purchase_id"].'</td>';
+                    echo '<td>'.$rowview["supplier_id"].'</td>';
+                    echo '<td>'.$rowview["amount"].'</td>';
+                    echo '<td>'.$rowview["pay_mode"].'</td>';
+                    echo '<td>';
+                      echo '<a href="index.php?pg=purchase.php&option=fullview&pk='.$rowview["purchase_id"].'"><button class="btn btn-success">View</button></a> ';
+                      echo '<a href="index.php?pg=purchase.php&option=edit&pk='.$rowview["purchase_id"].'"><button class="btn btn-info">Edit</button></a> ';
+                      echo '<a onclick="return confirmdelete()" href="index.php?pg=bill11.php&option=delete&pk='.$rowview["purchase_id"].'"><button class="btn btn-danger">Delete</button></a> ';
+                    echo '</td>';
+                  echo'</tr>';
+                }
+                ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <?php
+    }
+    else if ($_GET["option"] == "fullview")
+    {
+      $get_purchaseid =$_GET["pk"];
+      $sqlfullview = "SELECT * FROM purchase WHERE purchase_id='get_purchaseid'";
+      $resultfullview = mysqli_query($con,$sqlfullview) or die("Sqlfullview error ".mysqli_error($con));
+      $rowfullview=mysqli_fetch_assoc($resultfullview);
+      ?>
+      <div class="card">
+      <div class="card-body">
+      <center><h5 class="card-title">d Full View</h5></center>
+      <div class="table-responsive">
+        <table id="zero_config" class="table table-striped table-bordered">
+          <tr><th>d ID</th><td><?php echo $rowfullview["purchase_id"]; ?></td></tr>
+          <tr><th> Supplier ID</th><td><?php echo $rowfullview["supplier_id"]; ?></td></tr>
+          <tr><th>Purchase Date</th><td><?php echo $rowfullview["purchase_date"]; ?></td></tr>
+          <tr><th> Amount</th><td><?php echo $rowfullview["amount"]; ?></td></tr>
+          <tr><th> Pay Mode</th><td><?php echo $rowfullview["pay_mode"]; ?></td></tr>
+          <tr><th> Pay Status</th><td><?php echo $rowfullview["pay_status"]; ?></td></tr>
+          <tr><th> Upload Slip</th><td><?php echo $rowfullview["upload_slip"]; ?></td></tr>
+
+          <tr>
+            <td colspan="2">
+              <center>
+                <a href="index.php?pg=bill11.php&option=view"><button class="btn btn-primary">Go Back</button></a>&nbsp;
+                <a href="index.php?pg=bill11.php&option=edit&pk=<?php echo $rowfullview["purchase_id"]; ?>"><button class="btn btn-info">Edit</button></a>&nbsp;
+
+              </center>
+            </td>
+          </tr>
+        </table>
+      </div>
+      </div>
+      </div>
+      <?php
+      }
+      else if ($_GET["option"] == "edit")
+      {
+
+      }
+      else if ($_GET["option"] == "delete")
+      {
+        $get_purchaseid =$_GET["pk"];
+      $sqldelete = "DELETE FROM purchase WHERE purchase_id='get_purchaseid'";
+      $resultdelete = mysqli_query($con,$sqldelete) or die ("Error in sqldelete ".mysqli_error($con));
+      if ($resultdelete)
+      {
+        echo '<script> alert("Record is Deleted");
+              window.location.href="index.php?pg=bill11.php&option=view";</script>';
+      }
+      }
+      }
+      ?>
+      </body>

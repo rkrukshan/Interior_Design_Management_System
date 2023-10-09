@@ -1,0 +1,42 @@
+<?php
+if (!isset($_SESSION))
+{
+  session_start();
+}
+
+include "config.php";
+?>
+<body>
+
+  <?php
+
+  if (isset($_GET["option"]))
+  {
+
+  }
+  else if ($_GET["option"] == "add")
+  {
+
+  }
+  else if ($_GET["option"] == "view")
+  {
+
+  }
+  else if ($_GET["option"] == "full_view")
+  {
+
+  }
+  else if ($_GET["option"] == "edit")
+  {
+
+  }
+  else if ($_GET["option"] == "delete")
+  {
+
+  }
+
+}
+
+  ?>
+
+</body>

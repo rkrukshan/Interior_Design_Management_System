@@ -1,0 +1,4 @@
+<label for="fname" class="col-sm-3 text-right control-label col-form-label">Mail Address</label>
+                                          <div class="col-sm-3">
+                                              <input type="<?php echo $inputtype; ?>"  class="form-control" id="txtuploadslip" name="txtmailaddress" placeholder="Mail Address Here" required>
+                                          </div>
